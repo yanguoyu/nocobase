@@ -10558,7 +10558,7 @@ dotignore@~0.1.2:
   dependencies:
     minimatch "^3.0.4"
 
-dottie@^2.0.4:
+dottie@^2.0.4, dottie@^2.0.6:
   version "2.0.6"
   resolved "https://registry.npmmirror.com/dottie/-/dottie-2.0.6.tgz#34564ebfc6ec5e5772272d466424ad5b696484d4"
 
@@ -17816,6 +17816,11 @@ ora@^5.4.1:
     strip-ansi "^6.0.0"
     wcwidth "^1.0.1"
 
+oracledb@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.npmjs.org/oracledb/-/oracledb-6.1.0.tgz#9b76c312137a1d4c23a14e7b9131b54bc8d96a68"
+  integrity sha512-0mQ5d7DTgz18SjHMksPT0DT/jhIbbdtncDd8M+xxU6lrdlePqdS/tMGlphDcGKKtCDXG42aOf/leS007q7s+ew==
+
 ordered-read-streams@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmmirror.com/ordered-read-streams/-/ordered-read-streams-1.0.1.tgz#77c0cb37c41525d64166d990ffad7ec6a0e1363e"
@@ -20923,6 +20928,28 @@ sequelize@^6.26.0:
     pg-connection-string "^2.6.0"
     retry-as-promised "^7.0.4"
     semver "^7.5.1"
+    sequelize-pool "^7.1.0"
+    toposort-class "^1.0.1"
+    uuid "^8.3.2"
+    validator "^13.9.0"
+    wkx "^0.5.0"
+
+sequelize@^6.29.0:
+  version "6.33.0"
+  resolved "https://registry.npmjs.org/sequelize/-/sequelize-6.33.0.tgz#45c70d52687f1c7eae3a0496f21f7055d99b46da"
+  integrity sha512-GkeCbqgaIcpyZ1EyXrDNIwktbfMldHAGOVXHGM4x8bxGSRAOql5htDWofPvwpfL/FoZ59CaFmfO3Mosv1lDbQw==
+  dependencies:
+    "@types/debug" "^4.1.8"
+    "@types/validator" "^13.7.17"
+    debug "^4.3.4"
+    dottie "^2.0.6"
+    inflection "^1.13.4"
+    lodash "^4.17.21"
+    moment "^2.29.4"
+    moment-timezone "^0.5.43"
+    pg-connection-string "^2.6.1"
+    retry-as-promised "^7.0.4"
+    semver "^7.5.4"
     sequelize-pool "^7.1.0"
     toposort-class "^1.0.1"
     uuid "^8.3.2"

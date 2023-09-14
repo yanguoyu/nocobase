@@ -174,7 +174,7 @@ export default class WorkflowPlugin extends Plugin {
       this.app.setMaintainingMessage('check for not started executions');
       this.ready = true;
       // check for not started executions
-      this.dispatch();
+      // this.dispatch();
     });
 
     this.app.on('beforeStop', async () => {

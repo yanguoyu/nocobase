@@ -224,6 +224,7 @@ export class PluginACL extends Plugin {
       });
 
       if (defaultRole && (await model.countRoles({ transaction })) == 0) {
+        model.set('id', parseInt(model.get('id')));
         await model.addRoles(defaultRole, { transaction });
       }
     });

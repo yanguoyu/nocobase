@@ -541,19 +541,20 @@ export class Application<StateT = DefaultState, ContextT = DefaultContext> exten
   }
 
   async dbVersionCheck(options?: { exit?: boolean }) {
-    const r = await this.db.version.satisfies({
-      mysql: '>=8.0.17',
-      sqlite: '3.x',
-      postgres: '>=10',
-    });
+    // const r = await this.db.version.satisfies({
+    //   mysql: '>=8.0.17',
+    //   sqlite: '3.x',
+    //   postgres: '>=10',
+    //   oracle: '>0',
+    // });
 
-    if (!r) {
-      console.log(chalk.red('The database only supports MySQL 8.0.17 and above, SQLite 3.x and PostgreSQL 10+'));
-      if (options?.exit) {
-        process.exit();
-      }
-      return false;
-    }
+    // if (!r) {
+    //   console.log(chalk.red('The database only supports MySQL 8.0.17 and above, SQLite 3.x and PostgreSQL 10+'));
+    //   if (options?.exit) {
+    //     process.exit();
+    //   }
+    //   return false;
+    // }
 
     if (this.db.inDialect('mysql')) {
       const result = await this.db.sequelize.query(`SHOW VARIABLES LIKE 'lower_case_table_names'`, { plain: true });

@@ -164,7 +164,7 @@ export class SortField extends Field {
 
   bind() {
     super.bind();
-    this.on('afterSync', this.initRecordsSortValue);
+    // this.on('afterSync', this.initRecordsSortValue);
     this.on('beforeUpdate', this.onScopeChange);
     this.on('beforeCreate', this.setSortValue);
   }

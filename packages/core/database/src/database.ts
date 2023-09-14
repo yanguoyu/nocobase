@@ -132,6 +132,15 @@ export const DialectVersionAccessors = {
       return semver.minVersion(m[0]).version;
     },
   },
+
+  oracle: {
+    sql: `SELECT VERSION as "version"
+          FROM PRODUCT_COMPONENT_VERSION
+          WHERE PRODUCT LIKE '%Database%'`,
+    get(v: string) {
+      return v;
+    },
+  },
 };
 
 class DatabaseVersion {
@@ -149,9 +158,11 @@ class DatabaseVersion {
           return false;
         }
         const [result] = (await this.db.sequelize.query(accessors[dialect].sql)) as any;
+        console.log({ result });
         return semver.satisfies(accessors[dialect].get(result?.[0]?.version), versions[dialect]);
       }
     }
+
     return false;
   }
 }
@@ -676,7 +687,7 @@ export class Database extends EventEmitter implements AsyncEmitter {
         if (skip.includes(tableName)) {
           continue;
         }
-        await this.sequelize.query(`DROP TABLE IF EXISTS ${tableName} CASCADE`);
+        await this.sequelize.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
       }
       return;
     }
