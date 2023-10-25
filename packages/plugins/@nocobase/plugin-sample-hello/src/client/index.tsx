@@ -33,38 +33,75 @@ const LearnMore: React.FC = () => {
   const dataSource = [
     {
       key: '1',
-      name: 'Collection 1',
-      description: 'collection1',
+      plugin: {
+        displayName: 'Hello',
+        name: '@nocobase/plugin-hello',
+      },
+      collection: {
+        title: 'Collection 1',
+        name: 'collection1',
+      },
     },
     {
       key: '2',
-      name: 'Collection 2',
-      description: 'collection2',
+      plugin: {
+        displayName: 'ACL',
+        name: '@nocobase/plugin-acl',
+      },
+      collection: {
+        title: 'Collection 2',
+        name: 'collection2',
+      },
     },
     {
       key: '3',
-      name: 'Collection 3',
-      description: 'collection3',
+      plugin: {
+        displayName: 'API keys',
+        name: '@nocobase/plugin-api-keys',
+      },
+      collection: {
+        title: 'Collection 3',
+        name: 'collection3',
+      },
     },
   ];
 
   const columns = [
     {
-      title: 'Collection display name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Plugin',
+      dataIndex: 'plugin',
+      key: 'plugin',
+      width: '50%',
+      render: (plugin) => {
+        return (
+          <div>
+            {plugin.displayName}
+            <br />
+            <div style={{ color: 'rgba(0, 0, 0, 0.3)', fontSize: '0.9em' }}>{plugin.name}</div>
+          </div>
+        );
+      },
     },
     {
-      title: 'Collection name',
-      dataIndex: 'description',
-      key: 'description',
+      title: 'Collection',
+      dataIndex: 'collection',
+      key: 'collection',
+      render: (collection) => {
+        return (
+          <div>
+            {collection.title}
+            <br />
+            <div style={{ color: 'rgba(0, 0, 0, 0.3)', fontSize: '0.9em' }}>{collection.name}</div>
+          </div>
+        );
+      },
     },
   ];
 
   return (
     <>
       <a onClick={showModal}>Learn more</a>
-      <Modal open={isModalOpen} footer={null} onOk={handleOk} onCancel={handleCancel}>
+      <Modal width={800} open={isModalOpen} footer={null} onOk={handleOk} onCancel={handleCancel}>
         <h3>System metadata</h3>
         <Table bordered size={'small'} dataSource={dataSource} columns={columns} />
         <h3>System config</h3>
