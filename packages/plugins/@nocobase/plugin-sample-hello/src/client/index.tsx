@@ -1,4 +1,4 @@
-import { TableOutlined } from '@ant-design/icons';
+import { PlusOutlined, TableOutlined, UploadOutlined } from '@ant-design/icons';
 import {
   Plugin,
   SchemaComponentOptions,
@@ -6,14 +6,14 @@ import {
   SchemaInitializerContext,
   SettingsCenterProvider,
 } from '@nocobase/client';
-import { Button, Card, Checkbox, Table } from 'antd';
+import { Alert, Button, Card, Checkbox, Divider, Space, Table, Tabs } from 'antd';
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HelloDesigner } from './HelloDesigner';
 
-import { InboxOutlined, LoadingOutlined } from '@ant-design/icons';
-import type { UploadProps } from 'antd';
-import { Modal, Result, Upload, message } from 'antd';
+import { InboxOutlined } from '@ant-design/icons';
+import type { TabsProps, UploadProps } from 'antd';
+import { Modal, Upload, message } from 'antd';
 
 const LearnMore: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -68,21 +68,6 @@ const LearnMore: React.FC = () => {
 
   const columns = [
     {
-      title: 'Plugin',
-      dataIndex: 'plugin',
-      key: 'plugin',
-      width: '50%',
-      render: (plugin) => {
-        return (
-          <div>
-            {plugin.displayName}
-            <br />
-            <div style={{ color: 'rgba(0, 0, 0, 0.3)', fontSize: '0.9em' }}>{plugin.name}</div>
-          </div>
-        );
-      },
-    },
-    {
       title: 'Collection',
       dataIndex: 'collection',
       key: 'collection',
@@ -96,18 +81,68 @@ const LearnMore: React.FC = () => {
         );
       },
     },
+    {
+      title: 'Origin',
+      dataIndex: 'plugin',
+      key: 'plugin',
+      width: '50%',
+      render: (plugin) => {
+        return (
+          <div>
+            {plugin.displayName}
+            <br />
+            <div style={{ color: 'rgba(0, 0, 0, 0.3)', fontSize: '0.9em' }}>{plugin.name}</div>
+          </div>
+        );
+      },
+    },
+  ];
+
+  const items: TabsProps['items'] = [
+    {
+      key: '1',
+      label: 'System metadata',
+      children: (
+        <>
+          <Alert style={{ marginBottom: 16 }} message={'占位，系统元数据说明'} />
+          <Table bordered size={'small'} dataSource={dataSource} columns={columns} />
+        </>
+      ),
+    },
+    {
+      key: '2',
+      label: 'System config',
+      children: (
+        <>
+          <Alert />
+          <Table bordered size={'small'} dataSource={dataSource} columns={columns} />
+        </>
+      ),
+    },
+    {
+      key: '3',
+      label: 'Business data',
+      children: (
+        <>
+          <Alert />
+          <Table bordered size={'small'} dataSource={dataSource} columns={columns} />
+        </>
+      ),
+    },
   ];
 
   return (
     <>
       <a onClick={showModal}>Learn more</a>
-      <Modal width={800} open={isModalOpen} footer={null} onOk={handleOk} onCancel={handleCancel}>
-        <h3>System metadata</h3>
-        <Table bordered size={'small'} dataSource={dataSource} columns={columns} />
-        <h3>System config</h3>
-        <Table bordered size={'small'} dataSource={dataSource} columns={columns} />
-        <h3>Business data</h3>
-        <Table bordered size={'small'} dataSource={dataSource} columns={columns} />
+      <Modal
+        title={'Backup instructions'}
+        width={800}
+        open={isModalOpen}
+        footer={null}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Tabs defaultActiveKey="1" items={items} />
       </Modal>
     </>
   );
@@ -173,6 +208,93 @@ export const HelloBlockInitializer = (props) => {
   );
 };
 
+const NewBackup: React.FC<any> = ({ ButtonComponent = Button }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <ButtonComponent icon={<PlusOutlined />} type="primary" onClick={showModal}>
+        New backup
+      </ButtonComponent>
+      <Modal title="New backup" width={800} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <strong style={{ fontWeight: 600, display: 'block', margin: '16px 0 8px' }}>
+          Select the data to be backed up (
+          <LearnMore />
+          ):
+        </strong>
+        <div style={{ lineHeight: 2, marginBottom: 8 }}>
+          <Checkbox defaultChecked disabled /> System metadata
+          <br />
+          <Checkbox /> System config
+          <br />
+          <Checkbox /> Business data
+        </div>
+      </Modal>
+    </>
+  );
+};
+
+const Restore: React.FC<any> = ({ ButtonComponent = Button, title, upload = false }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <ButtonComponent onClick={showModal}>{title}</ButtonComponent>
+      <Modal
+        title="Restore"
+        width={800}
+        footer={upload ? null : undefined}
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        {upload && <RestoreUpload />}
+
+        {!upload && (
+          <strong style={{ fontWeight: 600, display: 'block', margin: '16px 0 8px' }}>
+            Select the data to be backed up (
+            <LearnMore />
+            ):
+          </strong>
+        )}
+        {!upload && (
+          <div style={{ lineHeight: 2, marginBottom: 8 }}>
+            <Checkbox defaultChecked disabled /> System metadata
+            <br />
+            <Checkbox /> System config
+            <br />
+            <Checkbox /> Business data
+          </div>
+        )}
+      </Modal>
+    </>
+  );
+};
+
 const HelloProvider = React.memo((props) => {
   const items = useContext<any>(SchemaInitializerContext);
   const mediaItems = items.BlockInitializers.items.find((item) => item.key === 'media');
@@ -199,25 +321,98 @@ const HelloProvider = React.memo((props) => {
           icon: 'ApiOutlined',
           tabs: {
             tab1: {
-              title: 'Backup',
+              title: 'Backup & Restore',
               component: () => (
                 <div>
                   <Card bordered={false}>
-                    <strong style={{ fontWeight: 600, display: 'block', marginBottom: 8 }}>
-                      Select the data to be backed up (
-                      <LearnMore />
-                      ):
-                    </strong>
-                    <div style={{ lineHeight: 2, marginBottom: 8 }}>
-                      <Checkbox defaultChecked disabled /> System metadata
-                      <br />
-                      <Checkbox /> System config
-                      <br />
-                      <Checkbox /> Business data
-                    </div>
-                    <Button type="primary">Start backup</Button>{' '}
+                    <Space style={{ float: 'right', marginBottom: 16 }}>
+                      <Restore
+                        upload
+                        title={
+                          <>
+                            <UploadOutlined /> Restore backup from ...
+                          </>
+                        }
+                      />{' '}
+                      <NewBackup />
+                    </Space>
+                    <Table
+                      tableLayout="fixed"
+                      dataSource={[
+                        {
+                          name: '20231025105324',
+                          fileSize: '130KB',
+                          createdAt: '2023-10-25 11:05:53',
+                          inProgress: true,
+                        },
+                        {
+                          name: '20231025110552',
+                          fileSize: '130KB',
+                          createdAt: '2023-10-25 11:05:53',
+                        },
+                      ]}
+                      columns={[
+                        {
+                          title: 'Name',
+                          dataIndex: 'name',
+                          onCell: (data) => {
+                            return data.inProgress
+                              ? {
+                                  colSpan: 4,
+                                }
+                              : {};
+                          },
+                          render: (name, data) =>
+                            data.inProgress ? (
+                              <div style={{ color: 'rgba(0, 0, 0, 0.88)' }}>{name} (Backing up...)</div>
+                            ) : (
+                              <div>{name}</div>
+                            ),
+                        },
+                        {
+                          title: 'File size',
+                          dataIndex: 'fileSize',
+                          onCell: (data) => {
+                            return data.inProgress
+                              ? {
+                                  colSpan: 0,
+                                }
+                              : {};
+                          },
+                        },
+                        {
+                          title: 'Created at',
+                          dataIndex: 'createdAt',
+                          onCell: (data) => {
+                            return data.inProgress
+                              ? {
+                                  colSpan: 0,
+                                }
+                              : {};
+                          },
+                        },
+                        {
+                          title: 'Actions',
+                          dataIndex: 'actions',
+                          onCell: (data) => {
+                            return data.inProgress
+                              ? {
+                                  colSpan: 0,
+                                }
+                              : {};
+                          },
+                          render: () => (
+                            <Space split={<Divider type="vertical" />}>
+                              <Restore ButtonComponent={'a'} title={'Restore'} />
+                              <a>Download</a>
+                              <a>Delete</a>
+                            </Space>
+                          ),
+                        },
+                      ]}
+                    />
                   </Card>
-                  <br />
+                  {/* <br />
                   <br />
                   <Card bordered={false}>
                     <Result icon={<LoadingOutlined />} title="Backing up" subTitle="message..." />
@@ -234,42 +429,42 @@ const HelloProvider = React.memo((props) => {
                         </Button>,
                       ]}
                     />
-                  </Card>
+                  </Card> */}
                 </div>
               ),
             },
-            tab2: {
-              title: 'Restore',
-              component: () => (
-                <div>
-                  <Card bordered={false}>
-                    <RestoreUpload />
-                  </Card>
-                  <br />
-                  <br />
-                  <Card bordered={false}>
-                    <strong style={{ fontWeight: 600, display: 'block', marginBottom: 8 }}>
-                      Select the data to be restored (<LearnMore />
-                      ):
-                    </strong>
-                    <div style={{ lineHeight: 2, marginBottom: 16 }}>
-                      <Checkbox defaultChecked disabled /> System metadata
-                      <br />
-                      <Checkbox /> System config
-                      <br />
-                      <Checkbox /> Business data
-                    </div>
-                    <Button type="primary">Start restore</Button>{' '}
-                  </Card>
+            // tab2: {
+            //   title: 'Restore',
+            //   component: () => (
+            //     <div>
+            //       <Card bordered={false}>
+            //         <RestoreUpload />
+            //       </Card>
+            //       <br />
+            //       <br />
+            //       <Card bordered={false}>
+            //         <strong style={{ fontWeight: 600, display: 'block', marginBottom: 8 }}>
+            //           Select the data to be restored (<LearnMore />
+            //           ):
+            //         </strong>
+            //         <div style={{ lineHeight: 2, marginBottom: 16 }}>
+            //           <Checkbox defaultChecked disabled /> System metadata
+            //           <br />
+            //           <Checkbox /> System config
+            //           <br />
+            //           <Checkbox /> Business data
+            //         </div>
+            //         <Button type="primary">Start restore</Button>{' '}
+            //       </Card>
 
-                  <br />
-                  <br />
-                  <Card bordered={false}>
-                    <Result icon={<LoadingOutlined />} title="Restoring" subTitle="message..." />
-                  </Card>
-                </div>
-              ),
-            },
+            //       <br />
+            //       <br />
+            //       <Card bordered={false}>
+            //         <Result icon={<LoadingOutlined />} title="Restoring" subTitle="message..." />
+            //       </Card>
+            //     </div>
+            //   ),
+            // },
           },
         },
       }}
