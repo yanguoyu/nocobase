@@ -1,4 +1,4 @@
-import { PlusOutlined, TableOutlined, UploadOutlined } from '@ant-design/icons';
+import { PlusOutlined, ReloadOutlined, TableOutlined, UploadOutlined } from '@ant-design/icons';
 import {
   Plugin,
   SchemaComponentOptions,
@@ -326,6 +326,7 @@ const HelloProvider = React.memo((props) => {
                 <div>
                   <Card bordered={false}>
                     <Space style={{ float: 'right', marginBottom: 16 }}>
+                      <Button icon={<ReloadOutlined />}>Refresh</Button>
                       <Restore
                         upload
                         title={
