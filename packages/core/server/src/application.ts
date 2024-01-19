@@ -47,6 +47,7 @@ import { Plugin } from './plugin';
 import { InstallOptions, PluginManager } from './plugin-manager';
 
 import packageJson from '../package.json';
+import { DataSourceManager } from './data-source/data-source-manager';
 
 export type PluginType = string | typeof Plugin;
 export type PluginConfiguration = PluginType | [PluginType, any];
@@ -269,6 +270,12 @@ export class Application<StateT = DefaultState, ContextT = DefaultContext> exten
 
   get version() {
     return this._version;
+  }
+
+  protected _dataSourceManager: DataSourceManager;
+
+  get dataSourceManager() {
+    return this._dataSourceManager;
   }
 
   get log() {
@@ -952,6 +959,8 @@ export class Application<StateT = DefaultState, ContextT = DefaultContext> exten
       default: 'basic',
       ...(this.options.authManager || {}),
     });
+
+    this._dataSourceManager = new DataSourceManager(this);
 
     this.resource({
       name: 'auth',
