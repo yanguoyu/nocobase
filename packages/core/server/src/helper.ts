@@ -1,7 +1,7 @@
 import cors from '@koa/cors';
 import Database from '@nocobase/database';
 import { Resourcer } from '@nocobase/resourcer';
-import { postPerfHooksWrap, prePerfHooksWrap, uid } from '@nocobase/utils';
+import { uid } from '@nocobase/utils';
 import { Command } from 'commander';
 import fs from 'fs';
 import i18next from 'i18next';
@@ -16,6 +16,7 @@ import { i18n } from './middlewares/i18n';
 import { requestLogger } from '@nocobase/logger';
 import { randomUUID } from 'crypto';
 import { createHistogram, RecordableHistogram } from 'perf_hooks';
+import { resourcerSelectorMiddleware } from './middlewares/resourcer-selector';
 
 export function createI18n(options: ApplicationOptions) {
   const instance = i18next.createInstance();
@@ -92,7 +93,10 @@ export function registerMiddlewares(app: Application, options: ApplicationOption
     tag: 'parseVariables',
     after: 'acl',
   });
+
   app.resourcer.use(dateTemplate, { tag: 'dateTemplate', after: 'acl' });
+
+  app.use(resourcerSelectorMiddleware(this));
 
   app.use(db2resource, { tag: 'db2resource', after: 'dataWrapping' });
   app.use(app.resourcer.restApiMiddleware(), { tag: 'restApi', after: 'db2resource' });
