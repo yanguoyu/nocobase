@@ -262,6 +262,19 @@ export class Resourcer {
     this.middlewares.add(middlewares, options);
   }
 
+  parseRequestFromRequest(ctx) {
+    return parseRequest(
+      {
+        path: ctx.request.path,
+        method: ctx.request.method,
+      },
+      {
+        prefix: this.options.prefix,
+        accessors: this.options.accessors,
+      },
+    );
+  }
+
   restApiMiddleware({ prefix, accessors }: KoaMiddlewareOptions = {}) {
     return async (ctx: ResourcerContext, next: () => Promise<any>) => {
       ctx.resourcer = this;

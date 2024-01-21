@@ -38,6 +38,7 @@ describe('dataSource', () => {
     app = mockServer();
 
     const testDataSource = new TestDataSource();
+
     const testResourcer = new Resourcer({
       prefix: '/test-resourcer',
     });
@@ -56,6 +57,9 @@ describe('dataSource', () => {
 
     app.dataSourceManager.add('test', testDataSource);
 
-    await app.agent().get('/test-resourcer/test:list').expect(200).expect('hello world');
+    const res = await app.agent().get('/test-resourcer/test:list');
+    expect(res.status).toBe(200);
+
+    expect(res.body.data).toBe('hello world');
   });
 });
