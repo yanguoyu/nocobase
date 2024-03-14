@@ -11,6 +11,7 @@ export class UuidField extends Field {
       context,
     );
   }
+
   get dataType() {
     return DataTypes.UUID;
   }
