@@ -1,5 +1,5 @@
-import { evaluate } from '../../utils';
 import evaluators from '..';
+import { evaluate } from '../../utils';
 
 describe('evaluate', () => {
   describe('pre-process', () => {
@@ -144,6 +144,17 @@ describe('evaluate', () => {
     it('number lead string path to object member (formula.js)', () => {
       const result = formulaEval('{{a.1a}}', { a: { '1a': 1 } });
       expect(result).toBe(1);
+    });
+
+    it('string number', () => {
+      const result = formulaEval('{{subtotal}}*{{discount}}*(1+{{tax}})+{{adjustment}}', {
+        total: 3333,
+        discount: 1,
+        subtotal: 300,
+        tax: 0,
+        adjustment: '3333',
+      });
+      console.log(result);
     });
   });
 
