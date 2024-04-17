@@ -372,17 +372,7 @@ export const InternalAdminLayout = () => {
                 padding: 0;
                 align-items: center;
               `}
-            >
-              <img
-                className={css`
-                  padding: 0 16px;
-                  object-fit: contain;
-                  width: 100%;
-                  height: 100%;
-                `}
-                src={result?.data?.data?.logo?.url}
-              />
-            </div>
+            ></div>
             <div
               className={css`
                 flex: 1 1 auto;
